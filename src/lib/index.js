@@ -4,7 +4,7 @@ import config from '../config/environment';
 
 export default function activateNats() {
 
-const url =  nats.DEFAULT_URI;
+const url =  config.nats.DEFAULT_URI;
 // const creds = v.creds;
 // const subject = argv._[0];
 const subject = 'foo';
@@ -57,6 +57,23 @@ nc.on('connect', function() {
         }
         //...
     });
+
+
+// "*" matches any token, at any level of the subject.
+nc.subscribe('foo.*.baz', function(msg, reply, subject) {
+    console.log('Msg received on [' + subject + '] : ' + msg);
+  });
+  
+  nc.subscribe('foo.bar.*', function(msg, reply, subject) {
+    console.log('Msg received on [' + subject + '] : ' + msg);
+  });
+  
+  // ">" matches any length of the tail of a subject, and can only be
+  // the last token E.g. 'foo.>' will match 'foo.bar', 'foo.bar.baz',
+  // 'foo.foo.bar.bax.22'
+  nc.subscribe('foo.>', function(msg, reply, subject) {
+    console.log('Msg received on [' + subject + '] : ' + msg);
+  });
 
     // the bad guy
     nc.publish("unsafe", {toString: "no good"});

@@ -4,6 +4,10 @@
 // ==================================
 module.exports = {
 
+    nats: {
+        DEFAULT_URI: 'nats://0.0.0.0:4222'
+    },
+
     // Sequelize connection options
     sequelize: {
         uri: 'sqlite://',
